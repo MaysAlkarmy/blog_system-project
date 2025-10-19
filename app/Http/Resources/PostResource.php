@@ -24,6 +24,19 @@ class PostResource extends JsonResource
                 'name' => $this->user->name,
                 'email' => $this->user->email,
             ],
+            // ✅ Include comments (with user names)
+            'comments' => $this->comments->map(function ($comment) {
+                return [
+                    'id' => $comment->id,
+                    'content' => $comment->content,
+                    'user' => [
+                        'id' => $comment->user->id,
+                        'name' => $comment->user->name,
+                    ],
+                    'created_at' => $comment->created_at->format('M d, Y h:i A'),
+                ];
+            }),
+        
         ];
     }
-}
+}  //M d, Y h:i A

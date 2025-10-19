@@ -13,9 +13,17 @@ class CommentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($postId)
     {
-        //
+        $comments = Comment::where('post_id', $postId)
+            ->with('user:id,name') // include commenter name
+            ->latest()
+            ->get();
+
+        return response()->json([
+            'post_id' => $postId,
+            'comments' => $comments,
+        ]);
     }
 
     /**
@@ -43,14 +51,7 @@ class CommentController extends Controller
         ], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
+   
     /**
      * Update the specified resource in storage.
      */

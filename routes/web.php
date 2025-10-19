@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
-use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\User\RegistrationController;
 use Illuminate\Support\Facades\Route;
@@ -42,6 +42,8 @@ Route::prefix('user')->group(function () {
 //Route::get('/showRegister', [RegistrationController::class, 'showRegister'])->name('showRegister');
 });
 
-Route::middleware(['auth:user'])->group(function () {
+
+Route::middleware(['auth'])->group(function () {
     Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });

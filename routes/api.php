@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\User\AuthController as UserAuthController;
 use App\Http\Controllers\Api\Admin\AuthController as AdminAuthController;
+use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\PostApiController;
 
 // all routes work
@@ -28,6 +29,7 @@ Route::prefix('admin')->group(function () {
     });
 });
 
+// post routes
 // Public routes
 Route::get('/posts', [PostApiController::class, 'index']);
 Route::get('/posts/{post}', [PostApiController::class, 'show']);
@@ -38,3 +40,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/posts/{post}', [PostApiController::class, 'update']);
     Route::delete('/posts/{post}', [PostApiController::class, 'destroy']);
 });
+
+// ✅ Public routes
+Route::get('/posts/{post}/comments', [CommentController::class, 'index']);
+
+// 🔒 Protected routes (only logged-in users)
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/posts/{post}/comments', [CommentController::class, 'store']);
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
+});
+

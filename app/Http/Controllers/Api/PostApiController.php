@@ -15,7 +15,7 @@ class PostApiController extends Controller
     // show all posts 
     public function index()
     {
-        $posts = Post::with('user')->latest()->get();
+        $posts = Post::with('user','comments.user')->latest()->get();
         return PostResource::collection($posts);
     
     }
