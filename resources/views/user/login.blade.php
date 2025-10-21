@@ -1,32 +1,46 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login</title>
-</head>
-<body>
-    <h1>Login</h1>
+@extends('layout.auth')
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+@section('title', 'Login')
 
-        <label>Email</label><br>
-        <input type="email" name="email" value="{{ old('email') }}">
-        @error('email') <p style="color:red">{{ $message }}</p> @enderror
-        <br><br>
+@section('content')
+<h3 class="text-center mb-4">Login</h3>
 
-        <label>Password</label><br>
-        <input type="password" name="password">
-        @error('password') <p style="color:red">{{ $message }}</p> @enderror
-        <br><br>
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
-        <label>
-            <input type="checkbox" name="remember"> Remember Me
-        </label>
-        <br><br>
+@if (session('error'))
+    <div class="alert alert-danger">{{ session('error') }}</div>
+@endif
 
-        <button type="submit">Login</button>
-    </form>
+<form method="POST" action="{{ route('login') }}">
+    @csrf
 
-    <p>Don’t have an account? <a href="{{ route('register') }}">Register here</a></p>
-</body>
-</html>
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" name="email" class="form-control" required value="{{ old('email') }}">
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input type="password" name="password" class="form-control" required>
+    </div>
+
+    <div class="mb-3 form-check">
+        <input type="checkbox" name="remember" class="form-check-input" id="remember">
+        <label class="form-check-label" for="remember">Remember Me</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Login</button>
+
+    <div class="text-center mt-3">
+        Don’t have an account? <a href="{{ route('register') }}">Register here</a>
+    </div>
+</form>
+@endsection

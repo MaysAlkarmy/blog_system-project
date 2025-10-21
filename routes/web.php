@@ -7,9 +7,12 @@ use App\Http\Controllers\User\RegistrationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });     // test the routes  --> all its work
 
+Route::get('/test', function () {
+    return view('test');
+});  
 // Admin Routes 
 
 Route::prefix('admin')->group(function () {
@@ -47,3 +50,4 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
+

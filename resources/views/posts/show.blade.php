@@ -1,51 +1,97 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ $post->title }}</title>
-</head>
-<body>
-    <h1>{{ $post->title }}</h1>
-    <p>{{ $post->body }}</p>
-    <p><small>By {{ $post->user->name }} | {{ $post->created_at->diffForHumans() }}</small></p>
+@extends('layout.app')
 
-    <h3>Comments</h3>
+@section('title', $post->title)
 
-{{-- Comment Form --}}
-@auth
-<form action="{{ route('comments.store', $post->id) }}" method="POST">
-    @csrf
-    <div class="mb-3">
-        <textarea name="content" class="form-control" rows="3" placeholder="Write your comment..." required></textarea>
-    </div>
-    <button type="submit" class="btn btn-primary">Add Comment</button>
-</form>
-@else
-<p><a href="{{ route('login') }}">Login</a> to add a comment.</p>
-@endauth
+@section('content')
+<div class="row justify-content-center">
+    <div class="col-lg-8">
 
-<hr>
+        {{-- Post Card --}}
+        <div class="card mb-4 shadow-sm rounded-4 border-0">
+            <div class="card-body">
+                
+                {{-- Edit/Delete Buttons (Only for post owner) --}}
+                @if(Auth::id() === $post->user_id)
+                    <div class="d-flex justify-content-end mb-3">
+                        <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-sm btn-warning me-2">Edit</a>
+                        <form action="{{ route('posts.destroy', $post->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this post?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </div>
+                @endif
 
-{{-- Display Comments --}}
-@if($post->comments->count())
-    @foreach($post->comments as $comment)
-        <div class="border rounded p-2 mb-2">
-            <strong>{{ $comment->user->name }}</strong>
-            <p>{{ $comment->content }}</p>
-            <small class="text-muted">{{ $comment->created_at->format('M d, Y h:i A') }}</small>
+                {{-- Post Title --}}
+                <h2 class="card-title fw-bold">{{ $post->title }}</h2>
 
-            @if(Auth::check() && Auth::id() === $comment->user_id)
-                <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" class="d-inline">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                </form>
-            @endif
+                {{-- Author and Date --}}
+                <p class="text-muted d-flex align-items-center mb-3">
+                    <span class="fw-bold me-2">{{ $post->user->name }}</span>
+                    <span class="post-date">{{ $post->created_at->diffForHumans() }}</span>
+                </p>
+
+                {{-- Full Content --}}
+                <div class="card-text mb-4">
+                    {!! nl2br(e($post->content)) !!}
+                </div>
+            </div>
         </div>
-    @endforeach
-@else
-    <p>No comments yet. Be the first to comment!</p>
-@endif
 
-    <a href="{{ route('posts.index') }}">Back to Posts</a>
-</body>
-</html>
+        {{-- Comments Section --}}
+        <div class="card mb-4 shadow-sm rounded-4 border-0">
+            <div class="card-body">
+                <h5 class="mb-3">Comments ({{ $post->comments->count() }})</h5>
+
+                @if($post->comments->count() > 0)
+                    @foreach($post->comments as $comment)
+                        <div class="border rounded-3 p-3 mb-2 bg-light">
+                            <strong>{{ $comment->user->name }}</strong>
+                            <small class="text-muted ms-1">{{ $comment->created_at->diffForHumans() }}</small>
+                            <p class="mb-0">{{ $comment->content }}</p>
+                        </div>
+                    @endforeach
+                @else
+                    <p class="text-muted">No comments yet. Be the first to comment!</p>
+                @endif
+
+                {{-- Add Comment Form --}}
+                <form action="{{ route('comments.store', $post->id) }}" method="POST" class="mt-3">
+                    @csrf
+                    <div class="input-group">
+                        <input type="text" name="content" class="form-control" placeholder="Add a comment..." required>
+                        <button type="submit" class="btn btn-outline-primary">Comment</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+        {{-- Back Button --}}
+        <a href="{{ route('posts.index') }}" class="btn btn-outline-secondary">← Back to Posts</a>
+
+    </div>
+</div>
+@endsection
+
+@push('styles')
+<style>
+.post-date {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.border {
+    background-color: #f8f9fa !important;
+    border-radius: 0.5rem !important;
+}
+
+.input-group input {
+    border-radius: 0.375rem 0 0 0.375rem;
+}
+
+.input-group button {
+    border-radius: 0 0.375rem 0.375rem 0;
+}
+</style>
+@endpush

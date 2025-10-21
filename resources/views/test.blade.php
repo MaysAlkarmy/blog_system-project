@@ -77,7 +77,7 @@
                     <div class="card-body">
                         <h3 class="text-center">Login</h3>
 
-                        <form action="{{ route('admin.login') }}" method="POST">
+                        <form action="{{ route('login') }}" method="POST">
                             {{-- Show Validation Errors --}}
 @if ($errors->any())
     <div class="alert alert-danger">

@@ -1,73 +1,99 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>All Posts</title>
-</head>
-<body>
-    <h1>All Posts</h1>
+@extends('layout.app')
 
-    <a href="{{ route('posts.create') }}">Create New Post</a>
-    <hr>
+@section('title', 'All Posts')
 
-    {{-- Loop through all posts --}}
-    @foreach($posts as $post)
-        <h2>
-            <a href="{{ route('posts.show', $post) }}">{{ $post->title }}</a>
-        </h2>
+@section('content')
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">All Posts</h2>
+    <a href="{{ route('posts.create') }}" class="btn btn-primary">+ Create Post</a>
+</div>
 
-        <p>{{ Str::limit($post->body, 100) }}</p>
-        <p>
-            <small>
-                By {{ $post->user->name }} |
-                {{ $post->created_at->setTimezone('Asia/Amman')->diffForHumans() }}
-            </small>
-        </p>
+@if (session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+@endif
 
-        {{-- Only show edit/delete for post owner --}}
-        @if($post->user_id === auth()->id())
-            <a href="{{ route('posts.edit', $post) }}">Edit</a>
-            <form method="POST" action="{{ route('posts.destroy', $post) }}" style="display:inline">
-                @csrf
-                @method('DELETE')
-                <button type="submit">Delete</button>
-            </form>
-        @endif
+@if ($posts->count() > 0)
+    <div class="row">
+        @foreach ($posts as $post)
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 shadow-sm rounded-4 border-0 hover-shadow">
+                    <div class="card-body">
+                        {{-- Post Title --}}
+                        <h5 class="card-title">{{ $post->title }}</h5>
 
-        <hr>
+                        {{-- Author and Date --}}
+                        <p class="text-muted d-flex align-items-center mb-2">
+                            <span class="fw-bold me-2">by {{ $post->user->name }}</span>
+                            <span class="post-date">{{ $post->created_at->diffForHumans() }}</span>
+                        </p>
 
-        {{-- 💬 Comments Section --}}
-        <h4>Comments ({{ $post->comments->count() }})</h4>
+                        {{-- Post Snippet --}}
+                        <p class="card-text">{{ Str::limit($post->body, 120) }}</p>
 
-        @forelse($post->comments as $comment)
-            <div style="margin-left:20px; border:1px solid #ddd; padding:8px; margin-bottom:6px;">
-                <strong>{{ $comment->user->name ?? 'Unknown User' }}</strong>
-                <p>{{ $comment->content }}</p>
-                <small>{{ $comment->created_at->setTimezone('Asia/Amman')->diffForHumans() }}</small>
+                        {{-- Read More --}}
+                        <a href="{{ route('posts.show', $post->id) }}" class="btn btn-primary btn-sm mb-3">Read More</a>
+
+                        {{-- Comments --}}
+                        <div class="comments mt-3">
+                            <h6 class="mb-2">Comments:</h6>
+                            @foreach($post->comments as $comment)
+                                <div class="border rounded-3 p-2 mb-2 bg-light">
+                                    <strong>{{ $comment->user->name }}</strong>
+                                    <small class="text-muted ms-1">{{ $comment->created_at->diffForHumans() }}</small>
+                                    <p class="mb-0">{{ $comment->content }}</p>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        {{-- Add Comment Form --}}
+                        <form action="{{ route('comments.store', $post->id) }}" method="POST" class="mt-2">
+                            @csrf
+                            <div class="input-group">
+                                <input type="text" name="content" class="form-control" placeholder="Add a comment..." required>
+                                <button type="submit" class="btn btn-outline-primary">Comment</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-        @empty
-            <p style="margin-left:20px; color:gray;">No comments yet.</p>
-        @endforelse
+        @endforeach
+    </div>
+@else
+    <div class="text-center py-5">
+        <h5 class="text-muted">No posts found.</h5>
+        <a href="{{ route('posts.create') }}" class="btn btn-outline-primary mt-3">Create your first post</a>
+    </div>
+@endif
+@endsection
 
-       {{-- 📝 Add Comment Form --}}
-        @auth
-            <form method="POST" action="{{ route('comments.store', $post->id) }}" style="margin-top:10px; margin-left:20px;">
-                @csrf
-                <input type="text" name="content" placeholder="Write a comment..." required style="width:300px;">
-                <button type="submit">Add Comment</button>
-            </form>
-        @else
-            <p style="margin-left:20px;">
-                <a href="{{ route('login') }}">Login</a> to comment.
-            </p>
-        @endauth
+@push('styles')
+<style>
+/* Post date smaller */
+.post-date {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
 
-        <hr><br>
-    @endforeach
+/* Card hover effect */
+.hover-shadow:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+}
 
-    {{-- Logout --}}
-    <form method="POST" action="{{ route('logout') }}">
-        @csrf
-        <button type="submit">Logout</button>
-    </form>
-</body>
-</html>
+/* Rounded comment boxes */
+.comments .border {
+    background-color: #f8f9fa;
+    border-radius: 0.5rem;
+}
+
+/* Input group styling */
+.input-group input {
+    border-radius: 0.375rem 0 0 0.375rem;
+}
+
+.input-group button {
+    border-radius: 0 0.375rem 0.375rem 0;
+}
+</style>
+@endpush
