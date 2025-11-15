@@ -1,0 +1,115 @@
+/* ----------------------------
+   Body & General
+---------------------------- */
+body.bg-light {
+    background-color: #407294 !important;
+    font-family: Arial, sans-serif;
+}
+
+/* ----------------------------
+   Header
+---------------------------- */
+
+
+
+.navbar.custom-header {
+    background-color: #43b5bd; /*  header color */
+    color: rgb(55, 132, 184);
+}
+
+.navbar.custom-header .nav-link.active {
+    color: #1e517a !important;   /* color for active link  */ 
+    font-weight: 600;            
+    border-bottom: 2px solid #748fb4;   /* color for line under link   */
+}
+
+.navbar.custom-header .dropdown-menu {
+    border-radius: 0.5rem;
+}
+
+.navbar.custom-header .dropdown-item:hover {
+    background-color: #a2bfdb;
+}
+
+/* ----------------------------
+   Footer
+---------------------------- */
+footer {
+    background-color: #9db2c5; /* Dark footer */
+    color: #fff;
+    text-align: center;
+    padding: 15px 0;
+}
+
+footer p {
+    margin: 0;
+}
+
+/* ----------------------------
+   Post Cards
+---------------------------- */
+.card {
+    border-radius: 0.75rem;
+}
+
+.card.shadow-sm {
+    box-shadow: 0 0.125rem 0.25rem rgba(224, 215, 215, 0.075);
+}
+
+.card-title {
+    font-weight: 700;
+}
+
+/* Post date smaller than author */
+.post-date {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+/* ----------------------------
+   Comments Section
+---------------------------- */
+.comment-card {
+    border-radius: 0.5rem;
+    padding: 10px 15px;
+    margin-bottom: 8px;
+    background-color: #9ac0e6;
+}
+
+/* ----------------------------
+   Forms & Buttons
+---------------------------- */
+.input-group input {
+    border-radius: 0.375rem 0 0 0.375rem;
+}
+
+.input-group button {
+    border-radius: 0 0.375rem 0.375rem 0;
+}
+
+.btn-primary {
+    background-color: #4589d6;   /* button color   */
+    border-color: #a1c2e7;       /* button border color    */
+}
+
+.btn-primary:hover {
+    background-color: #93b7e0;
+    border-color: #67a6ca;
+}
+
+.btn-outline-secondary {
+    border-radius: 0.375rem;
+}
+
+/* Admin Dashboard */
+.card.text-center {
+    border-radius: 10px;
+    transition: 0.3s ease;
+}
+
+.card.text-center:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+

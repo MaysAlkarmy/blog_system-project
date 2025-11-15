@@ -7,12 +7,12 @@ use App\Http\Controllers\User\RegistrationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('home');
+    return view('welcome');
 });     // test the routes  --> all its work
 
-Route::get('/test', function () {
-    return view('test');
-});  
+// Route::get('/test', function () {
+//     return view('test');
+// });  
 // Admin Routes 
 
 Route::prefix('admin')->group(function () {

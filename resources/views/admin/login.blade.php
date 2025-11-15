@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -55,7 +56,7 @@
         }
 
         .btn-primary:hover {
-            background: linear-gradient(135deg,#b8a6a2, #97f5e8);
+            background: linear-gradient(135deg, #b8a6a2, #97f5e8);
         }
 
         a {
@@ -79,47 +80,37 @@
 
                         <form action="{{ route('admin.login') }}" method="POST">
                             {{-- Show Validation Errors --}}
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul class="mb-0">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul class="mb-0">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
 
-{{-- Show Login Failed Message --}}
-@if (session('error'))
-    <div class="alert alert-danger">
-        {{ session('error') }}
-    </div>
-@endif
+                            {{-- Show Login Failed Message --}}
+                            @if (session('error'))
+                                <div class="alert alert-danger">
+                                    {{ session('error') }}
+                                </div>
+                            @endif
 
                             @csrf
 
                             {{-- Email --}}
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email address</label>
-                                <input 
-                                    type="email" 
-                                    class="form-control" 
-                                    name="email" 
-                                    id="email" 
-                                    placeholder="Enter your email" 
-                                    required>
+                                <input type="email" class="form-control" name="email" id="email"
+                                    placeholder="Enter your email" required>
                             </div>
 
                             {{-- Password --}}
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password</label>
-                                <input 
-                                    type="password" 
-                                    class="form-control" 
-                                    name="password" 
-                                    id="password" 
-                                    placeholder="Enter your password" 
-                                    required>
+                                <input type="password" class="form-control" name="password" id="password"
+                                    placeholder="Enter your password" required>
                             </div>
 
                             {{-- Remember Me --}}
@@ -135,7 +126,7 @@
 
                             {{-- Extra Link --}}
                             <div class="text-center mt-3">
-                                <a href="/user/register">Don't have an account ? Register now</a>
+                                <a href="/admin/register">Don't have an account ? Register now</a>
                             </div>
                         </form>
                     </div>
@@ -147,4 +138,5 @@
     {{-- Bootstrap JS --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

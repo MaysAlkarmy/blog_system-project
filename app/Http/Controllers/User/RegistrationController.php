@@ -79,11 +79,11 @@ class RegistrationController extends Controller
    public function logout()
     {
         Auth::guard('web')->logout();
-        return redirect()->route('login');
+        return view('welcome');
     }
 
    public function dashboard()
     {
-        return view('user.dashboard');
+        return view('welcome');
     }
 }
